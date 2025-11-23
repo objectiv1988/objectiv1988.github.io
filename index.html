@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+  <meta charset="utf-8">
+  <title>Objectiv</title>
+  <link rel="icon" href="objectiv.png" sizes="192x192">
+  <meta property="og:site_name" content="Objectiv">
+  <meta property="og:title" content="Objectiv">
+  <meta property="og:type" content="Objectiv">
+  <meta property="og:url" content="Objectiv">
+  <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+  }
+
+  :before,
+  :after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  html {
+    height: 100%;
+  }
+
+  body {
+    background-color: #111111;
+    color: #ffffff;
+    font-family: "Open Sans";
+    height: 100%;
+    box-sizing: border-box;
+    min-height: 100%;
+    min-width: 100%;
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  #main-container {
+    height: 100%;
+    min-height: 100%;
+    min-width: 100%;
+    transition: all .6s ease-in-out;
+    -webkit-transition: all .6s ease-in-out;
+    -moz-transition: all .6s ease-in-out;
+    -o-transition: all .6s ease-in-out;
+    z-index: 0;
+    overflow: hidden;
+    position: initial !important;
+    overflow-y: auto;
+  }
+
+  #main-container::after {
+    content: "";
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #111;
+    opacity: 0.4;
+    z-index: -1;
+    position: absolute;
+  }
+
+  #wrapper {
+    visibility: visible;
+    width: 100%;
+    height: calc(100% - 90px);
+    position: relative;
+    display: inline-block;
+  }
+
+  .center {
+    clear: both;
+    content: "";
+    display: block;
+    margin: 0 auto;
+    max-width: 1020px;
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  header {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+
+  #title {
+    padding: 50px 0 30px;
+  }
+
+  h1 {
+    font-family: inherit;
+    font-weight: lighter;
+    text-align: center;
+    padding: 0 0 20px;
+    vertical-align: middle;
+  }
+
+  #content {
+    position: absolute;
+    display: inline-block;
+    width: 100%;
+    left: 0;
+    vertical-align: middle;
+
+  }
+
+  h2 {
+    font-size: 45px;
+    font-weight: 300;
+    font-style: normal;
+    text-align: center;
+    width: 100%;
+    display: block;
+  }
+
+  #description {
+    font-weight: 300;
+    font-style: normal;
+  }
+
+  #description p {
+    margin-bottom: 10px;
+    font-size: 14px;
+    margin: 0;
+    line-height: normal;
+  }
+
+  footer {
+    position: relative;
+    top: 0;
+    display: inline-block;
+    width: 100%;
+    margin: 25px 0 20px;
+  }
+
+  footer .center {
+    padding: 0;
+  }
+
+  #footer {
+    font-weight: 300;
+    font-style: normal;
+  }
+
+  .background {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+
+  .background img {
+    position: absolute;
+    visibility: visible;
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: auto;
+    height: auto;
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+  @supports (object-fit: cover) {
+    .background img {
+      min-height: 100%;
+      min-width: 100%;
+      object-fit: cover;
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+</style>
+
+<body>
+  <div id="main-container">
+    <div id="wrapper">
+      <div id="header" class="center">
+        <header>
+          <div id="title">
+            <h1>Objectiv</h1>
+          </div>
+        </header>
+      </div>
+      <div id="content">
+        <div class="center">
+          <h2 id="heading">Itt nyugszik a propagandamédia lejárató oldala</h2>
+          <div id="description">
+            <p>Mi van, kicsi?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <div class="center">
+        <div id="footer">CÉ Objectiv 2025</div>
+      </div>
+    </footer>
+    <picture class="background">
+      <img src="bg.jpg">
+    </picture>
+  </div>
+</body>
+<script>
+  const header = document.querySelector('#header');
+  const content = document.querySelector('#content');
+
+  window.addEventListener('resize', resize)
+  resize();
+
+  function resize() {
+    let mid = Math.max(0, (window.innerHeight - content.clientHeight) / 2);
+    let headerHeight = header.clientHeight;
+    if (mid > headerHeight) {
+      content.style.position = 'absolute';
+      content.style.top = mid + 'px';
+    } else {
+      content.style.position = 'relative';
+      content.style.top = 0;
+    }
+  }
+</script>
+
+</html>
