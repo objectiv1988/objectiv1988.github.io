@@ -213,7 +213,7 @@
         <div class="center">
           <h2 id="heading">Itt nyugszik a propagandamédia lejárató oldala</h2>
           <div id="description">
-            <p id="dynamic">Árad a Tisza</p>
+            <p>Árad a Tisza</p>
           </div>
         </div>
       </div>
@@ -229,15 +229,11 @@
   </div>
 </body>
 <script>
-  const dynamicContentUrl = "./pastebin.php";
   const header = document.querySelector('#header');
   const content = document.querySelector('#content');
-  const dynamic = document.querySelector('#dynamic');
 
   window.addEventListener('resize', resize)
   resize();
-
-  setDynamicContent();
 
   function resize() {
     let mid = Math.max(0, (window.innerHeight - content.clientHeight) / 2);
@@ -250,11 +246,6 @@
       content.style.top = 0;
     }
   }
-
-  async function setDynamicContent() {
-    const response = await fetch(dynamicContentUrl);
-    dynamic.innerHTML = await response.text();
-  } 
 </script>
 
 </html>
