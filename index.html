@@ -209,7 +209,7 @@
         <div class="center">
           <h2 id="heading">Itt nyugszik a propagandamédia lejárató oldala</h2>
           <div id="description">
-            <p>Mi van, kicsi?</p>
+            <p id="dynamic">Árad a Tisza</p>
           </div>
         </div>
       </div>
@@ -225,8 +225,14 @@
   </div>
 </body>
 <script>
+  const dynamicContentUrl = "https://pastebin.com/raw/xsjF5Kcm";
   const header = document.querySelector('#header');
   const content = document.querySelector('#content');
+  const dynamic = document.querySelector('#dynamic');
+
+  fetch(dynamicContentUrl).then((res) => {
+    dynamic.innerHTML = res.text();
+  });
 
   window.addEventListener('resize', resize)
   resize();
