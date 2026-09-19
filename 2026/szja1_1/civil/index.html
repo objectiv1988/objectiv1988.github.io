@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szja 1% - Technikai számos kedvezményezettek</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+
+    <header
+        class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white shadow-lg border-b border-indigo-700/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+                        Szja 1% - Technikai számos kedvezményezettek
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6">
+
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                <div
+                    class="w-12 h-12 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-building-columns">
+                    </i>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Szervezetek száma</p>
+                    <h3 id="stat-count" class="text-2xl font-bold text-slate-900">0</h3>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                <div
+                    class="w-12 h-12 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-coins">
+                    </i>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Összesen felajánlott összeg
+                    </p>
+                    <h3 id="stat-amount" class="text-2xl font-bold text-slate-900">0 Ft</h3>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                <div
+                    class="w-12 h-12 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-users">
+                    </i>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Összes rendelkező</p>
+                    <h3 id="stat-supporters" class="text-2xl font-bold text-slate-900">0 fő</h3>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                <div
+                    class="w-12 h-12 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-calculator">
+                    </i>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Átlagos felajánlás / fő</p>
+                    <h3 id="stat-avg" class="text-2xl font-bold text-slate-900">0 Ft</h3>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                <div
+                    class="w-12 h-12 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-money">
+                    </i>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Átlagos havi bruttó bér / fő</p>
+                    <h3 id="stat-gross" class="text-2xl font-bold text-slate-900">0 Ft</h3>
+                </div>
+            </div>
+        </section>
+
+        <section
+            class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
+            <!-- Search bar -->
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass">
+                    </i>
+                </div>
+                <input type="text" id="search-input" oninput="handleSearch()"
+                    placeholder="Keresés név vagy technikai szám alapján..."
+                    class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 block transition duration-150">
+            </div>
+
+            <!-- Filter Controls -->
+            <div class="flex flex-wrap items-center gap-3">
+
+                <div class="flex items-center gap-2">
+                    <label for="page-size"
+                        class="text-xs font-medium text-slate-500 whitespace-nowrap">Megjelenítés:</label>
+                    <select id="page-size" onchange="handlePageSizeChange()"
+                        class="bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 p-2.5">
+                        <option value="15">15</option>
+                        <option value="25" selected>25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="ALL">Mind</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col">
+            <div class="overflow-x-auto custom-scrollbar">
+                <table class="w-full text-sm text-left text-slate-600">
+                    <thead
+                        class="text-xs uppercase bg-slate-100 text-slate-700 border-b border-slate-200 sticky top-0 z-10 select-none">
+                        <tr>
+                            <th scope="col" onclick="sortTable('serialNumber')"
+                                class="px-4 py-3.5 font-semibold cursor-pointer hover:bg-slate-200 transition">
+                                <div class="flex items-center gap-1.5">
+                                    <span>Sor-szám</span>
+                                    <span id="sort-icon-serialNumber" class="text-slate-400">
+                                        <i class="fa-solid fa-sort">
+                                        </i>
+                                    </span>
+                                </div>
+                            </th>
+                            <th scope="col" onclick="sortTable('taxNumber')"
+                                class="px-4 py-3.5 font-semibold cursor-pointer hover:bg-slate-200 transition">
+                                <div class="flex items-center gap-1.5">
+                                    <span>Adószám</span>
+                                    <span id="sort-icon-taxNumber" class="text-slate-400">
+                                        <i class="fa-solid fa-sort">
+                                        </i>
+                                    </span>
+                                </div>
+                            </th>
+                            <th scope="col" onclick="sortTable('name')"
+                                class="px-6 py-3.5 font-semibold cursor-pointer hover:bg-slate-200 transition">
+                                <div class="flex items-center gap-1.5">
+                                    <span>Név</span>
+                                    <span id="sort-icon-name" class="text-slate-400">
+                                        <i class="fa-solid fa-sort">
+                                        </i>
+                                    </span>
+                                </div>
+                            </th>
+                            <th scope="col" onclick="sortTable('hq')"
+                                class="px-4 py-3.5 font-semibold cursor-pointer hover:bg-slate-200 transition hidden sm:table-cell">
+                                <div class="flex items-center gap-1.5">
+                                    <span>Székhely</span>
+                                    <span id="sort-icon-hq" class="text-slate-400">
+                                        <i class="fa-solid fa-sort">
+                                        </i>
+                                    </span>
+                                </div>
+                            </th>
+                            <th scope="col" onclick="sortTable('amount')"
+                                class="px-6 py-3.5 font-semibold text-right cursor-pointer hover:bg-slate-200 transition">
+                                <div class="flex items-center justify-end gap-1.5">
+                                    <span>Felajánlott összeg (Ft)</span>
+                                    <span id="sort-icon-amount" class="text-slate-400">
+                                        <i class="fa-solid fa-sort">
+                                        </i>
+                                    </span>
+                                </div>
+                            </th>
+                            <th scope="col" onclick="sortTable('supporters')"
+                                class="px-6 py-3.5 font-semibold text-right cursor-pointer hover:bg-slate-200 transition">
+                                <div class="flex items-center justify-end gap-1.5">
+                                    <span>Felajánlók száma (fő)</span>
+                                    <span id="sort-icon-supporters" class="text-slate-400">
+                                        <i class="fa-solid fa-sort">
+                                        </i>
+                                    </span>
+                                </div>
+                            </th>
+                            <th scope="col" onclick="sortTable('average')"
+                                class="px-6 py-3.5 font-semibold text-right cursor-pointer hover:bg-slate-200 transition">
+                                <div class="flex items-center justify-end gap-1.5">
+                                    <span>Átlagos felajánlás (Ft/fő)</span>
+                                    <span id="sort-icon-average" class="text-slate-400">
+                                        <i class="fa-solid fa-sort">
+                                        </i>
+                                    </span>
+                                </div>
+                            </th>
+                            <th scope="col" onclick="sortTable('gross')"
+                                class="px-6 py-3.5 font-semibold text-right cursor-pointer hover:bg-slate-200 transition">
+                                <div class="flex items-center justify-end gap-1.5">
+                                    <span>Havi bruttó átlagbér (Ft/fő)</span>
+                                    <span id="sort-icon-gross" class="text-slate-400">
+                                        <i class="fa-solid fa-sort">
+                                        </i>
+                                    </span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body" class="divide-y divide-slate-200">
+                        <!-- Rows rendered dynamically via Javascript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State Message -->
+            <div id="no-results" class="hidden p-12 text-center">
+                <div
+                    class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fa-solid fa-folder-open">
+                    </i>
+                </div>
+                <h4 class="text-lg font-semibold text-slate-800">Nincs találat</h4>
+                <p class="text-slate-500 text-sm mt-1">Próbáljon meg más keresési kifejezést vagy törölje a szűrőket.
+                </p>
+            </div>
+
+            <!-- Pagination Controls Footer -->
+            <div id="pagination-container"
+                class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-xs text-slate-500">
+                    Összesen <span id="showing-start" class="font-semibold text-slate-700">0</span> - <span
+                        id="showing-end" class="font-semibold text-slate-700">0</span> / <span id="total-items"
+                        class="font-semibold text-slate-700">0</span> találat
+                </div>
+                <div class="flex items-center gap-1.5" id="pagination-buttons">
+                    <!-- Pagination buttons generated dynamically -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 mt-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>Forrás: </p>
+            <p><a
+                    href="https://nav.gov.hu/ado/szja1_1/kimutatasok_elszamolasok/civil-szervezetek/egyszaz_kiut_2026/kozlemeny-a-2026.-evben-szja-1-os-felajanlasban-reszesult-civil-kedvezmenyezettekrol">
+                    Közlemény a 2026. évben szja 1%-os felajánlásban részesült civil kedvezményezettekről
+                </a></p>
+            <p class="mt-1 text-slate-500">
+                Az adatok tájékoztató jellegűek. Interaktív felület az elemzés és keresés megkönnyítésére.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+
+        // App State
+        let rawDataset = [];
+        let filteredData = [];
+        let currentPage = 1;
+        let pageSize = 25;
+        let sortColumn = 'serialNumber';
+        let sortDirection = 'asc';
+        let factor = 100*(100/15)/12
+
+        Papa.parse("https://raw.githubusercontent.com/objectiv1988/objectiv1988.github.io/refs/heads/main/2026/szja1_1/civil/Szja%201-os%20felajanlasban%20reszesult%20technikai%20szamos%20kedvezmenyezettek_2026.csv", {
+            download: true,
+            skipEmptyLines: true,
+
+            complete: csv => {
+
+                for (let row of csv.data) {
+                    rawDataset.push({
+                        serialNumber: Number(row[0]),
+                        taxNumber: row[1],
+                        name: row[2],
+                        hq: row[3],
+                        amount: Number(row[4]),
+                        supporters: Number(row[5]),
+                        average: row[4]/row[5],
+                        gross: row[4]*factor/row[5]
+                    });
+                }
+
+                rawDataset.shift();
+                filteredData = [...rawDataset];
+                console.log(filteredData);
+
+                applySortAndFilter();
+            }
+        });
+
+        // Formatters
+        const currencyFormatter = new Intl.NumberFormat('hu-HU', { style: 'currency', currency: 'HUF', maximumFractionDigits: 0 });
+        const numberFormatter = new Intl.NumberFormat('hu-HU');
+
+        window.addEventListener('DOMContentLoaded', () => {
+            applySortAndFilter();
+        });
+
+        function updateStats(data) {
+            const count = data.length;
+            const totalAmount = data.reduce((sum, item) => sum + item.amount, 0);
+            const totalSupporters = data.reduce((sum, item) => sum + item.supporters, 0);
+            const avgAmount = totalSupporters > 0 ? Math.round(totalAmount / totalSupporters) : 0;
+            const avgGross = totalSupporters > 0 ? Math.round(totalAmount * factor / totalSupporters) : 0;
+
+            document.getElementById('stat-count').innerText = numberFormatter.format(count);
+            document.getElementById('stat-amount').innerText = currencyFormatter.format(totalAmount);
+            document.getElementById('stat-supporters').innerText = numberFormatter.format(totalSupporters) + ' fő';
+            document.getElementById('stat-avg').innerText = currencyFormatter.format(avgAmount);
+            document.getElementById('stat-gross').innerText = currencyFormatter.format(avgGross);
+        }
+
+        function handleSearch() {
+            currentPage = 1;
+            applySortAndFilter();
+        }
+
+        function handlePageSizeChange() {
+            const val = document.getElementById('page-size').value;
+            pageSize = val === 'ALL' ? filteredData.length : parseInt(val, 10);
+            currentPage = 1;
+            renderTable();
+        }
+
+        function sortTable(column) {
+            if (sortColumn === column) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortColumn = column;
+                sortDirection = (column === 'amount' || column === 'supporters' || column === 'average' || column === 'gross') ? 'desc' : 'asc';
+            }
+            applySortAndFilter();
+        }
+
+        function applySortAndFilter() {
+            const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+
+            filteredData.sort((a, b) => {
+                let valA = a[sortColumn];
+                let valB = b[sortColumn];
+
+                if (typeof valA === 'string') {
+                    valA = valA.toLowerCase();
+                    valB = valB.toLowerCase();
+                }
+
+                if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
+                if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            updateStats(filteredData);
+            updateSortIcons();
+            renderTable();
+        }
+
+        function updateSortIcons() {
+            const columns = ['serialNumber', 'taxNumber', 'name', 'hq', 'amount', 'supporters', 'average', 'gross'];
+            columns.forEach(col => {
+                const iconContainer = document.getElementById(`sort-icon-${col}`);
+                if (!iconContainer) return;
+
+                if (col === sortColumn) {
+                    iconContainer.className = 'text-indigo-600 font-bold';
+                    iconContainer.innerHTML = sortDirection === 'asc'
+                        ? '<i class="fa-solid fa-arrow-up-short-wide"></i>'
+                        : '<i class="fa-solid fa-arrow-down-wide-short"></i>';
+                } else {
+                    iconContainer.className = 'text-slate-400';
+                    iconContainer.innerHTML = '<i class="fa-solid fa-sort"></i>';
+                }
+            });
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('table-body');
+            const noResults = document.getElementById('no-results');
+            const paginationContainer = document.getElementById('pagination-container');
+
+            tbody.innerHTML = '';
+
+            if (filteredData.length === 0) {
+                noResults.classList.remove('hidden');
+                paginationContainer.classList.add('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+                paginationContainer.classList.remove('hidden');
+            }
+
+            const total = filteredData.length;
+            const start = (currentPage - 1) * pageSize;
+            const end = Math.min(start + pageSize, total);
+            const pageData = filteredData.slice(start, end);
+
+            pageData.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.className = index % 2 === 0
+                    ? 'bg-white hover:bg-slate-50/80 transition duration-150'
+                    : 'bg-slate-50/50 hover:bg-slate-100/80 transition duration-150';
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-medium text-slate-400">
+                        <div class="flex items-center gap-2">
+                            <span>${item.serialNumber}.</span>
+                        </div>
+                    </td>
+                    <td class="px-4 py-4 font-mono text-xs font-semibold text-slate-700 whitespace-nowrap">
+                        <span class="inline-block px-2.5 py-1 rounded bg-slate-100 border border-slate-200">${item.taxNumber}</span>
+                    </td>
+                    <td class="px-6 py-4 font-medium text-slate-900">
+                        <div class="flex items-center gap-2">
+                            <span>${item.name}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 font-medium text-slate-400">
+                        <div class="flex items-center gap-2">
+                            <span>${item.hq}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-right font-semibold text-slate-700 whitespace-nowrap">
+                        ${currencyFormatter.format(item.amount)}
+                    </td>
+                    <td class="px-6 py-4 text-right font-semibold text-slate-700 whitespace-nowrap">
+                        ${numberFormatter.format(item.supporters)} <span class="text-xs font-normal text-slate-400">fő</span>
+                    </td>
+                    <td class="px-6 py-4 text-right font-semibold text-slate-700 whitespace-nowrap">
+                        ${currencyFormatter.format(item.average)}
+                    </td>
+                    <td class="px-6 py-4 text-right font-bold text-slate-900 whitespace-nowrap">
+                        ${currencyFormatter.format(item.gross)}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Update Pagination Info
+            document.getElementById('showing-start').innerText = total === 0 ? 0 : start + 1;
+            document.getElementById('showing-end').innerText = end;
+            document.getElementById('total-items').innerText = total;
+
+            renderPaginationButtons(total);
+        }
+
+        function renderPaginationButtons(totalItems) {
+            const container = document.getElementById('pagination-buttons');
+            container.innerHTML = '';
+
+            const totalPages = Math.ceil(totalItems / pageSize);
+            if (totalPages <= 1) return;
+
+            // Previous button
+            const prevBtn = document.createElement('button');
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.className = `px-3 py-1.5 rounded-lg text-xs font-medium border transition ${currentPage === 1 ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed' : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'}`;
+            prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+            prevBtn.onclick = () => { currentPage--; renderTable(); };
+            container.appendChild(prevBtn);
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = `px-3 py-1.5 rounded-lg text-xs font-medium border transition ${i === currentPage ? 'bg-indigo-600 text-white border-indigo-600 font-bold' : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'}`;
+                    pageBtn.innerText = i;
+                    pageBtn.onclick = () => { currentPage = i; renderTable(); };
+                    container.appendChild(pageBtn);
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'px-1 text-slate-400 text-xs';
+                    ellipsis.innerText = '...';
+                    container.appendChild(ellipsis);
+                }
+            }
+
+            // Next button
+            const nextBtn = document.createElement('button');
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.className = `px-3 py-1.5 rounded-lg text-xs font-medium border transition ${currentPage === totalPages ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed' : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'}`;
+            nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+            nextBtn.onclick = () => { currentPage++; renderTable(); };
+            container.appendChild(nextBtn);
+        }
+    </script>
+</body>
+
+</html>
