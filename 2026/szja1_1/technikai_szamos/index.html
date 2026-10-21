@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Szja 1% - Technikai számos kedvezményezettek</title>
+    <link rel="icon" href="../../../objectiv.png" sizes="192x192">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -109,7 +110,8 @@
                     </i>
                 </div>
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Átlagos havi bruttó bér / fő</p>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Átlagos havi bruttó bér /
+                        fő</p>
                     <h3 id="stat-gross" class="text-2xl font-bold text-slate-900">0 Ft</h3>
                 </div>
             </div>
@@ -285,7 +287,7 @@
         let pageSize = 25;
         let sortColumn = 'serialNumber';
         let sortDirection = 'asc';
-        let factor = 100*(100/15)/12
+        let factor = 100 * (100 / 15) / 12
 
         Papa.parse("https://raw.githubusercontent.com/objectiv1988/objectiv1988.github.io/refs/heads/main/2026/szja1_1/technikai_szamos/Szja%201-os%20felajanlasban%20reszesult%20technikai%20szamos%20kedvezmenyezettek_2026.csv", {
             download: true,
@@ -301,8 +303,8 @@
                         hq: row[3],
                         amount: Number(row[4]),
                         supporters: Number(row[5]),
-                        average: row[4]/row[5],
-                        gross: row[4]*factor/row[5]
+                        average: row[4] / row[5],
+                        gross: row[4] * factor / row[5]
                     });
                 }
 
@@ -362,9 +364,9 @@
             const searchQuery = document.getElementById('search-input').value.toUpperCase().trim();
 
             filteredData = rawDataset.filter((e) => {
-                return ( e.techNumber.includes(searchQuery) || e.name.includes(searchQuery) || e.hq.includes(searchQuery) );
+                return (e.techNumber.includes(searchQuery) || e.name.includes(searchQuery) || e.hq.includes(searchQuery));
             });
-            
+
             filteredData.sort((a, b) => {
                 let valA = a[sortColumn];
                 let valB = b[sortColumn];
