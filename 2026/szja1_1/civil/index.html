@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Szja 1% - Civil kedvezményezettek</title>
     <link rel="icon" href="../../../objectiv.png" sizes="192x192">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -126,7 +126,7 @@
                     </i>
                 </div>
                 <input type="text" id="search-input" oninput="handleSearch()"
-                    placeholder="Keresés név vagy adószám alapján..."
+                    placeholder="Keresés név, adószám vagy székhely alapján..."
                     class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 block transition duration-150">
             </div>
 
@@ -364,7 +364,7 @@
             const searchQuery = document.getElementById('search-input').value.toUpperCase().trim();
 
             filteredData = rawDataset.filter((e) => {
-                return (e.taxNumber.includes(searchQuery) || e.name.includes(searchQuery) || e.hq.includes(searchQuery));
+                return (e.taxNumber.includes(searchQuery) || e.name.toUpperCase().trim().includes(searchQuery) || e.hq.toUpperCase().trim().includes(searchQuery));
             });
 
             filteredData.sort((a, b) => {
